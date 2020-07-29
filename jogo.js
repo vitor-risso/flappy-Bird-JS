@@ -104,17 +104,91 @@ const fundo ={
     },
 }
 
+//Tela de inicio
+
+const start = {
+    spriteX : 134,
+    spriteY : 0,
+    largura : 174,
+    altura : 152,
+    x : (canvas.width/2 - 174 /2),
+    y : 50,
+
+    desenha(){
+        contexto.drawImage(
+            sprites, 
+            start.spriteX, start.spriteY, 
+            start.largura, start.altura, 
+            start.x, start.y, 
+            start.largura, start.altura
+        );
+    },
+}
+
+//
+
+// TELAS
+
+//
+
+let TelaAtual ={}
+
+function mudaTela(novaTela) {
+    TelaAtual = novaTela;
+}
+
+const Telas = {
+    Inicio: {
+        desenha(){
+
+            fundo.desenhaFundo();
+            chao.desenhaChao();
+            flappyBird.desenha();
+            start.desenha();
+            
+
+        },
+
+        click(){
+            mudaTela(Telas.Jogo)
+        },
+
+        atualiza(){
+
+        }
+    },
+}
+
+Telas.Jogo ={
+    desenha(){
+        fundo.desenhaFundo();
+        chao.desenhaChao();
+        flappyBird.desenha();
+    },
+
+    atualiza(){
+        flappyBird.atualiza();
+
+    }
+}
+
 // loop
 function loop (){
-   
-    flappyBird.atualiza();
-    fundo.desenhaFundo();
-    chao.desenhaChao();
-    flappyBird.desenha();
+    
+    TelaAtual.desenha();
+    TelaAtual.atualiza();
+    
 
     //flappyBird.y += 1;  -> para fazer o flappy-Bird cair
  
     requestAnimationFrame(loop);
 }
 
+window.addEventListener('click', function(){
+    if(TelaAtual.click){
+        TelaAtual.click()
+    }
+})
+
+mudaTela(Telas.Inicio);
 loop();
